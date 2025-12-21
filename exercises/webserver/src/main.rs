@@ -1,4 +1,4 @@
-use std::net::{TcpListener, TcpStream};
+use std::net::{TcpListener, TcpStream, SocketAddr};
 use std::io::{Read, Write};
 
 use anyhow::Result;
@@ -31,15 +31,28 @@ fn handle_client(mut stream: TcpStream) -> Result<()> {
 
     );
 
-    let response = "HTTP/1.1 200 OK\r\n\r\nSuccess".to_string();
+    let response = "HTTP/1.1 200 OK\r\n\r\nSuccess ECRI XOXO".to_string();
 
-    stream.write(response.as_bytes());
+    let _ = stream.write(response.as_bytes());
+
     Ok(())
 }
 
 
 fn main() -> Result<()> {
-    let listener = TcpListener::bind("127.0.0.1:8000")?;
+    let ipaddr = [127, 0, 0, 1];
+    let port = 8000;
+    let addr = SocketAddr::from((ipaddr, port));
+    let listener = TcpListener::bind(&addr)?;
+
+    println!("Server listening on {}:{} ...",
+        ipaddr
+            .iter()
+            .map(|n| n.to_string())
+            .collect::<Vec<_>>()
+            .join("."),
+        port
+    );
 
     for stream in listener.incoming() {
         handle_client(stream?)?;

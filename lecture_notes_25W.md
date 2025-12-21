@@ -94,3 +94,52 @@ LUNCH
 - Command-line tools for networking
 
 
+## Session 7/8 - December 20
+
+-> We skip chapters 7 and 8 in our core book.
+
+- Review Web Client
+
+### Networking Stack (OSI in depth)
+
+- Build a Packet tracer in Rust (sharkr)
+
+    1. Physical & Datalink: Ethernet
+    2. Network: IP
+    3. Transport: TCP/UDP
+    4. Session/Presentation/Application: HTTP, FTP,...
+
+
+### Web Technologies
+
+- Markup Languages
+- URLS
+- The DOM
+- JavaScript
+- jQuery/HTMX
+
+---
+LUNCH
+---
+
+### Define Product and Business Model
+
+- Broad Categories for your CLI Tools:
+
+1. Developer Workflow (How can you make programming, compilation or deployment more efficient?)
+2. Network Automation (How can you analyze Network Activity and react to it?)
+3. Text Editing (How can you build highly specific text-editing workflows?)
+
+- Lean Canvas
+- Define Content -> Lean Canvas
+
+
+### Website on Github Pages
+
+- Using git and gh
+- Publish a Site on Github Pages
+
+
+
+
+
