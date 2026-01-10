@@ -28,8 +28,35 @@ pub struct OperationOutcome {
 }
 
 pub async fn run_validate(fhir_file: &str, base_url: &str) -> Result<()> {
-    let raw_json = fs::read_to_string(fhir_file)?;
-    let fhir_value = parse_fhir_resource(&raw_json)?;
+    let raw_json = read_fhir_file(fhir_file)?;
+    let (status, outcome) = validate_fhir_resource(&raw_json, base_url).await?;
+    print_validation_report(fhir_file, base_url, status, &outcome.issue);
+    process_validation_outcome(status, outcome)
+}
+
+fn process_validation_outcome(status: StatusCode, outcome: OperationOutcome) -> Result<()> {
+    if status.is_success()
+        && outcome
+            .issue
+            .iter()
+            .all(|i| !matches!(i.severity, Severity::Error | Severity::Fatal))
+    {
+        Ok(())
+    } else {
+        Err(ValidationError::ValidationFailed(status))
+    }
+}
+
+
+fn read_fhir_file(fhir_file: &str) -> Result<String> {
+    Ok(fs::read_to_string(fhir_file)?)
+}
+
+async fn validate_fhir_resource(
+    raw_json: &str,
+    base_url: &str,
+) -> Result<(StatusCode, OperationOutcome)> {
+    let fhir_value = parse_fhir_resource(raw_json)?;
 
     let resource_type = fhir_value
         .get("resourceType")
@@ -43,21 +70,15 @@ pub async fn run_validate(fhir_file: &str, base_url: &str) -> Result<()> {
         .post(&url)
         .header("Accept", "application/fhir+json")
         .header("Content-Type", "application/fhir+json")
-        .body(raw_json)
+        .body(raw_json.to_owned())
         .send()
         .await?;
 
     let status = response.status();
     let outcome: OperationOutcome = response.json().await?;
-
-    print_validation_report(fhir_file, base_url, status, &outcome.issue);
-
-    if status.is_success() && outcome.issue.iter().all(|i| !matches!(i.severity, Severity::Error | Severity::Fatal)) {
-        Ok(())
-    } else {
-        Err(ValidationError::ValidationFailed(status))
-    }
+    Ok((status, outcome))
 }
+
 
 fn parse_fhir_resource(raw_json: &str) -> Result<Value> {
     Ok(serde_json::from_str(raw_json)?)
