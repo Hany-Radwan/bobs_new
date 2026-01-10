@@ -54,9 +54,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 for line in report.error_lines {
                     println!("{}", line);
                 }
-            } else if json {
+            }
+            else if json {
                 println!("{}", serde_json::to_string_pretty(&report)?);
-            } else {
+            }
+            else {
                 println!("ClinLogix Report");
                 println!("----------------");
                 println!("File: {}", report.file);
