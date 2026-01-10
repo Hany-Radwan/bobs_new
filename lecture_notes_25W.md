@@ -118,6 +118,7 @@ LUNCH
 - JavaScript
 - jQuery/HTMX
 
+
 ---
 LUNCH
 ---
@@ -141,5 +142,7 @@ LUNCH
 
 
 
+
+## Session 9/10 - January 10
 
 
