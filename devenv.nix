@@ -13,6 +13,7 @@
     pkgs.rustc
     pkgs.cargo
     pkgs.cargo-watch
+    pkgs.cargo-machete
     pkgs.clippy
     pkgs.rustfmt
     pkgs.python312Packages.jupyterlab

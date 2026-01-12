@@ -1,15 +1,12 @@
 use axum::{
-    extract::{Request, State},
-    http::{HeaderMap, StatusCode},
-    middleware::{self, Next},
-    response::{IntoResponse, Response, Json},
-    routing::{get, post},
+    Json,
     Router,
+    routing::get,
+    response::IntoResponse,
+    http::{StatusCode, header::HeaderMap},
 };
+use std::net::SocketAddr;
 use base64::{engine::general_purpose, Engine as _};
-use serde::{Deserialize, Serialize};
-use serde_json::json;
-use std::{net::SocketAddr, path::PathBuf, sync::Arc};
 
 #[tokio::main]
 async fn main() {
